@@ -1,0 +1,1786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FirstLightValorant Tournament Statistics - Demo</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0f1923 0%, #1e3c4c 100%);
+            min-height: 100vh;
+            color: #fff;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Header */
+        header {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        h1 {
+            font-size: 32px;
+            background: linear-gradient(135deg, #ff4655 0%, #ff8b5a 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .demo-badge {
+            background: #ff4655;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        /* Legal Disclaimer */
+        .disclaimer {
+            background: rgba(255, 70, 85, 0.1);
+            border: 1px solid #ff4655;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #ffb8bd;
+        }
+        
+        /* Main Grid */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        /* Cards */
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .card h2 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: #ff8b5a;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* Input Controls */
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 500;
+        }
+        
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        .input-group input:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: #ff4655;
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .input-group input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+        
+        /* Buttons */
+        .btn {
+            background: linear-gradient(135deg, #ff4655 0%, #ff8b5a 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+            width: 100%;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 70, 85, 0.3);
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            margin-top: 10px;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        /* Match Display */
+        .match-display {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .match-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .match-info {
+            display: flex;
+            gap: 20px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .match-info span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        /* Player Stats Table */
+        .stats-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .stats-table thead {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .stats-table th {
+            padding: 12px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.5);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .stats-table td {
+            padding: 12px;
+            font-size: 14px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .stats-table tr:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+        
+        .player-name {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .agent-icon {
+            width: 30px;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+        
+        .team-red { color: #ff4655; }
+        .team-blue { color: #5a9fd4; }
+        
+        .kda {
+            font-weight: 600;
+        }
+        
+        .kda-positive { color: #50c878; }
+        .kda-negative { color: #ff6b6b; }
+        
+        /* Status Messages */
+        .status-message {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .status-success {
+            background: rgba(80, 200, 120, 0.1);
+            border: 1px solid #50c878;
+            color: #50c878;
+        }
+        
+        .status-error {
+            background: rgba(255, 107, 107, 0.1);
+            border: 1px solid #ff6b6b;
+            color: #ff6b6b;
+        }
+        
+        .status-warning {
+            background: rgba(255, 193, 7, 0.1);
+            border: 1px solid #ffc107;
+            color: #ffc107;
+        }
+        
+        /* Tournament Stats */
+        .tournament-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ff8b5a;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 5px;
+        }
+        
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top-color: #ff4655;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            flex-wrap: wrap;
+        }
+        
+        .tab {
+            padding: 12px 20px;
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .tab:hover {
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .tab.active {
+            color: #ff4655;
+        }
+        
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #ff4655;
+        }
+
+        /* Player Card */
+        .player-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .player-avatar {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #ff4655 0%, #ff8b5a 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .player-info {
+            flex: 1;
+        }
+
+        .player-info h3 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .player-info .subtitle {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 14px;
+        }
+
+        /* Team Card */
+        .team-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .team-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .team-name {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .team-record {
+            font-size: 18px;
+            color: #50c878;
+        }
+
+        /* Performance Chart */
+        .performance-chart {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .chart-bar {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .chart-label {
+            width: 100px;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .chart-progress {
+            flex: 1;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .chart-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff4655 0%, #ff8b5a 100%);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        .chart-value {
+            margin-left: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            min-width: 50px;
+            text-align: right;
+        }
+
+        /* API Requirements Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1e3c4c 0%, #0f1923 100%);
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .api-section {
+            margin-bottom: 25px;
+        }
+
+        .api-section h3 {
+            color: #ff8b5a;
+            margin-bottom: 10px;
+        }
+
+        .api-endpoint {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+        }
+
+        .api-method {
+            display: inline-block;
+            padding: 2px 8px;
+            background: #50c878;
+            color: white;
+            border-radius: 4px;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+        
+        /* Consent Badge */
+        .consent-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        
+        .consent-granted {
+            background: rgba(80, 200, 120, 0.2);
+            color: #50c878;
+        }
+        
+        .consent-pending {
+            background: rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+        }
+
+        /* Demo Controls */
+        .demo-controls {
+            background: rgba(255, 193, 7, 0.1);
+            border: 1px solid #ffc107;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .demo-controls h3 {
+            color: #ffc107;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .demo-controls p {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="header-content">
+                <h1>
+                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                        <path d="M20 5L35 20L20 35L5 20L20 5Z" fill="url(#grad1)" stroke="white" stroke-width="2"/>
+                        <defs>
+                            <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#ff4655;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#ff8b5a;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    FirstLightValorant Tournament Statistics
+                </h1>
+                <span class="demo-badge">DEMO MODE</span>
+            </div>
+            <div class="disclaimer">
+                <strong>Legal Notice:</strong> This tool isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing Riot Games properties. Riot Games, VALORANT, and all associated properties are trademarks or registered trademarks of Riot Games, Inc.
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="main-grid">
+            <!-- Left Panel - Controls -->
+            <div>
+                <!-- Demo Controls -->
+                <div class="demo-controls">
+                    <h3>🎮 DEMO MODE ACTIVE</h3>
+                    <p>This is a demonstration using mock data. In production, this tool will connect to the Riot Games API to fetch real match data.</p>
+                </div>
+
+                <!-- Match Finder -->
+                <div class="card">
+                    <h2>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M9 2a7 7 0 110 14A7 7 0 019 2zm0 12.5a5.5 5.5 0 100-11 5.5 5.5 0 000 11z"/>
+                            <path d="M14.35 14.35a1 1 0 011.41 0l2.12 2.12a1 1 0 01-1.41 1.41l-2.12-2.12a1 1 0 010-1.41z"/>
+                        </svg>
+                        Match Finder
+                    </h2>
+                    
+                    <div class="input-group">
+                        <label>Search Method</label>
+                        <select id="searchMethod" onchange="updateSearchFields()">
+                            <option value="player">By Player</option>
+                            <option value="matchId">By Match ID</option>
+                            <option value="tournament">By Tournament</option>
+                        </select>
+                    </div>
+                    
+                    <div id="playerSearch">
+                        <div class="input-group">
+                            <label>Player Riot ID</label>
+                            <input type="text" id="riotId" placeholder="PlayerName#TAG" value="Sentinel#VAL">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label>Time Range (Hours)</label>
+                            <input type="number" id="timeRange" value="6" min="1" max="24">
+                        </div>
+                    </div>
+                    
+                    <div id="matchIdSearch" style="display: none;">
+                        <div class="input-group">
+                            <label>Match ID</label>
+                            <input type="text" id="directMatchId" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
+                        </div>
+                    </div>
+                    
+                    <button class="btn" onclick="findMatches()">
+                        <span id="searchBtnText">Find Matches</span>
+                        <span id="searchLoader" class="loading" style="display: none;"></span>
+                    </button>
+                </div>
+                
+                <!-- Tournament Management -->
+                <div class="card" style="margin-top: 20px;">
+                    <h2>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M10 2a2 2 0 012 2v1h3a1 1 0 011 1v3a3 3 0 01-3 3h-1v2h2a1 1 0 011 1v1a2 2 0 01-2 2h-6a2 2 0 01-2-2v-1a1 1 0 011-1h2v-2H7a3 3 0 01-3-3V6a1 1 0 011-1h3V4a2 2 0 012-2z"/>
+                        </svg>
+                        FirstLightValorant Season 22
+                    </h2>
+                    
+                    <div class="tournament-stats">
+                        <div class="stat-card">
+                            <div class="stat-value">12</div>
+                            <div class="stat-label">MATCHES</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">24</div>
+                            <div class="stat-label">PLAYERS</div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 20px; padding: 15px; background: rgba(255, 193, 7, 0.1); border: 1px solid rgba(255, 193, 7, 0.3); border-radius: 8px;">
+                        <h3 style="color: #ffc107; font-size: 14px; margin-bottom: 10px;">🔒 Admin Only</h3>
+                        <button class="btn btn-secondary" onclick="showParticipants()">Manage Participants</button>
+                        <button class="btn btn-secondary" onclick="exportData()">Export Tournament Data</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right Panel - Results -->
+            <div>
+                <!-- Status Messages -->
+                <div id="statusArea"></div>
+                
+                <!-- Tabs -->
+                <div class="tabs">
+                    <button class="tab active" onclick="switchTab('matches')">Recent Matches</button>
+                    <button class="tab" onclick="switchTab('statistics')">Tournament Stats</button>
+                    <button class="tab" onclick="switchTab('player')">Player Stats</button>
+                    <button class="tab" onclick="switchTab('team')">Team Stats</button>
+                    <button class="tab" onclick="switchTab('consent')">Consent</button>
+                </div>
+                
+                <!-- Tab Content -->
+                <div id="matchesTab" class="card">
+                    <h2>Match Results</h2>
+                    <div id="matchResults"></div>
+                </div>
+                
+                <div id="statisticsTab" class="card" style="display: none;">
+                    <h2>Tournament Statistics</h2>
+                    <div id="statisticsContent"></div>
+                </div>
+                
+                <div id="playerTab" class="card" style="display: none;">
+                    <h2>Individual Player Statistics</h2>
+                    <div id="playerContent"></div>
+                </div>
+                
+                <div id="teamTab" class="card" style="display: none;">
+                    <h2>Team Statistics</h2>
+                    <div id="teamContent"></div>
+                </div>
+                
+                <div id="consentTab" class="card" style="display: none;">
+                    <h2>Player Consent Management</h2>
+                    <div id="consentContent"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- API Requirements Modal -->
+    <div id="apiModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 style="color: #ff8b5a;">Required Riot API Endpoints</h2>
+                <button class="modal-close" onclick="closeAPIModal()">&times;</button>
+            </div>
+            
+            <div class="api-section">
+                <h3>🔑 API Key Requirements</h3>
+                <p style="color: rgba(255, 255, 255, 0.7); margin-bottom: 15px;">
+                    Production API key with access to Valorant and Account endpoints
+                </p>
+                <ul style="color: rgba(255, 255, 255, 0.7); margin-left: 20px;">
+                    <li>Non-expiring production key (24-hour development keys insufficient)</li>
+                    <li>Rate limits suitable for tournament processing (300+ requests/tournament)</li>
+                    <li>Access to both regional and routing endpoints</li>
+                </ul>
+            </div>
+            
+            <div class="api-section">
+                <h3>📍 Account API (Routing: americas/europe/asia)</h3>
+                <div class="api-endpoint">
+                    <span class="api-method">GET</span>
+                    /riot/account/v1/accounts/by-riot-id/{gameName}/{tagLine}
+                </div>
+                <p style="color: rgba(255, 255, 255, 0.6); font-size: 14px; margin-left: 10px;">
+                    Purpose: Convert Riot ID to PUUID for player identification
+                </p>
+                
+                <div class="api-endpoint">
+                    <span class="api-method">GET</span>
+                    /riot/account/v1/accounts/by-puuid/{puuid}
+                </div>
+                <p style="color: rgba(255, 255, 255, 0.6); font-size: 14px; margin-left: 10px;">
+                    Purpose: Get account details from PUUID
+                </p>
+            </div>
+            
+            <div class="api-section">
+                <h3>🎮 Valorant Match API (Regional: na/eu/ap/kr/latam/br)</h3>
+                <div class="api-endpoint">
+                    <span class="api-method">GET</span>
+                    /val/match/v1/matches/{matchId}
+                </div>
+                <p style="color: rgba(255, 255, 255, 0.6); font-size: 14px; margin-left: 10px;">
+                    Purpose: Retrieve complete match details including player statistics
+                </p>
+                
+                <div class="api-endpoint">
+                    <span class="api-method">GET</span>
+                    /val/match/v1/matchlists/by-puuid/{puuid}
+                </div>
+                <p style="color: rgba(255, 255, 255, 0.6); font-size: 14px; margin-left: 10px;">
+                    Purpose: Get match history for player to find tournament matches
+                </p>
+            </div>
+            
+            <div class="api-section">
+                <h3>📊 Content API (Regional)</h3>
+                <div class="api-endpoint">
+                    <span class="api-method">GET</span>
+                    /val/content/v1/contents
+                </div>
+                <p style="color: rgba(255, 255, 255, 0.6); font-size: 14px; margin-left: 10px;">
+                    Purpose: Get static data for maps, agents, and game modes
+                </p>
+            </div>
+            
+            <div class="api-section">
+                <h3>🔐 Riot Sign On (RSO) Requirements</h3>
+                <p style="color: rgba(255, 255, 255, 0.7); margin-bottom: 10px;">
+                    For production deployment with player consent:
+                </p>
+                <ul style="color: rgba(255, 255, 255, 0.6); margin-left: 20px;">
+                    <li>OAuth2 integration for player authentication</li>
+                    <li>Consent flow for data collection approval</li>
+                    <li>Secure token management</li>
+                    <li>Player data access scopes</li>
+                </ul>
+            </div>
+            
+            <div class="api-section" style="background: rgba(255, 70, 85, 0.1); padding: 15px; border-radius: 8px;">
+                <h3>⚠️ Current Status</h3>
+                <p style="color: rgba(255, 255, 255, 0.7);">
+                    <strong>Development API Key Limitations:</strong><br>
+                    • Expires every 24 hours (unsuitable for tournaments)<br>
+                    • Limited endpoint access<br>
+                    • Cannot implement RSO authentication<br>
+                    • Insufficient for production deployment
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mock Data Generator
+        const mockData = {
+            players: [
+                { name: "Sentinel", tag: "VAL", puuid: "mock-uuid-1", consent: true },
+                { name: "Phoenix", tag: "007", puuid: "mock-uuid-2", consent: true },
+                { name: "Reyna", tag: "ACE", puuid: "mock-uuid-3", consent: false },
+                { name: "Jett", tag: "SKY", puuid: "mock-uuid-4", consent: true },
+                { name: "Sage", tag: "HEAL", puuid: "mock-uuid-5", consent: true },
+                { name: "Omen", tag: "DARK", puuid: "mock-uuid-6", consent: true },
+                { name: "Cypher", tag: "CAM", puuid: "mock-uuid-7", consent: false },
+                { name: "Sova", tag: "DART", puuid: "mock-uuid-8", consent: true },
+                { name: "Breach", tag: "STUN", puuid: "mock-uuid-9", consent: true },
+                { name: "Viper", tag: "TOX", puuid: "mock-uuid-10", consent: true }
+            ],
+            
+            agents: ["Jett", "Phoenix", "Reyna", "Sage", "Omen", "Cypher", "Sova", "Breach", "Viper", "Raze"],
+            maps: ["Ascent", "Bind", "Haven", "Split", "Breeze", "Icebox", "Fracture", "Pearl", "Lotus"],
+            
+            generateMatch: function(matchId, hoursAgo = 1) {
+                const players = [];
+                const selectedPlayers = [...this.players].sort(() => 0.5 - Math.random()).slice(0, 10);
+                
+                // Generate player stats
+                selectedPlayers.forEach((player, index) => {
+                    const teamId = index < 5 ? "Red" : "Blue";
+                    const kills = Math.floor(Math.random() * 25) + 5;
+                    const deaths = Math.floor(Math.random() * 20) + 5;
+                    const assists = Math.floor(Math.random() * 15);
+                    const damage = Math.floor(Math.random() * 2000) + 1000;
+                    const headshots = Math.floor(Math.random() * kills * 0.4);
+                    
+                    players.push({
+                        ...player,
+                        teamId: teamId,
+                        agent: this.agents[index],
+                        kills: kills,
+                        deaths: deaths,
+                        assists: assists,
+                        kd: (kills / Math.max(deaths, 1)).toFixed(2),
+                        kda: ((kills + assists) / Math.max(deaths, 1)).toFixed(2),
+                        damage: damage,
+                        combatScore: Math.floor((kills * 10 + assists * 5 + damage / 10)),
+                        headshots: headshots,
+                        headshotPercentage: kills > 0 ? Math.floor((headshots / kills) * 100) : 0
+                    });
+                });
+                
+                // Sort by combat score
+                players.sort((a, b) => b.combatScore - a.combatScore);
+                
+                const date = new Date();
+                date.setHours(date.getHours() - hoursAgo);
+                
+                return {
+                    matchId: matchId || `demo-${Math.random().toString(36).substr(2, 9)}`,
+                    map: this.maps[Math.floor(Math.random() * this.maps.length)],
+                    mode: "Competitive",
+                    duration: Math.floor(Math.random() * 20) + 25,
+                    timestamp: date,
+                    isCustom: Math.random() > 0.7,
+                    players: players,
+                    score: {
+                        red: Math.floor(Math.random() * 7) + 6,
+                        blue: 13
+                    }
+                };
+            }
+        };
+        
+        // State Management
+        let currentTab = 'matches';
+        let matches = [];
+        let selectedPlayer = null;
+        let selectedTeam = 'Team Alpha';
+        let tournamentParticipants = mockData.players.map(p => ({
+            ...p,
+            riotId: `${p.name}#${p.tag}`,
+            team: Math.random() > 0.5 ? "Team Alpha" : "Team Bravo"
+        }));
+        
+        // Initialize with some matches
+        function initializeDemo() {
+            for (let i = 0; i < 5; i++) {
+                matches.push(mockData.generateMatch(null, i * 2 + 1));
+            }
+            displayMatches();
+            updateStatistics();
+            updatePlayerStats();
+            updateTeamStats();
+            updateConsentManagement();
+        }
+        
+        // Tab Switching
+        function switchTab(tab) {
+            currentTab = tab;
+            
+            // Update tab buttons
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Show/hide content
+            document.getElementById('matchesTab').style.display = tab === 'matches' ? 'block' : 'none';
+            document.getElementById('statisticsTab').style.display = tab === 'statistics' ? 'block' : 'none';
+            document.getElementById('playerTab').style.display = tab === 'player' ? 'block' : 'none';
+            document.getElementById('teamTab').style.display = tab === 'team' ? 'block' : 'none';
+            document.getElementById('consentTab').style.display = tab === 'consent' ? 'block' : 'none';
+        }
+        
+        // Update Player Stats
+        function updatePlayerStats() {
+            const container = document.getElementById('playerContent');
+            
+            // Calculate individual player statistics
+            const playerStatsMap = {};
+            
+            matches.forEach(match => {
+                match.players.forEach(player => {
+                    const key = `${player.name}#${player.tag}`;
+                    if (!playerStatsMap[key]) {
+                        playerStatsMap[key] = {
+                            name: player.name,
+                            tag: player.tag,
+                            riotId: key,
+                            matches: [],
+                            agents: {},
+                            totalKills: 0,
+                            totalDeaths: 0,
+                            totalAssists: 0,
+                            totalDamage: 0,
+                            totalHeadshots: 0,
+                            totalCombatScore: 0,
+                            wins: 0
+                        };
+                    }
+                    
+                    const stats = playerStatsMap[key];
+                    stats.matches.push({
+                        matchId: match.matchId,
+                        map: match.map,
+                        agent: player.agent,
+                        kills: player.kills,
+                        deaths: player.deaths,
+                        assists: player.assists,
+                        damage: player.damage,
+                        combatScore: player.combatScore,
+                        won: (player.teamId === 'Red' && match.score.red > match.score.blue) || 
+                             (player.teamId === 'Blue' && match.score.blue > match.score.red)
+                    });
+                    
+                    stats.totalKills += player.kills;
+                    stats.totalDeaths += player.deaths;
+                    stats.totalAssists += player.assists;
+                    stats.totalDamage += player.damage;
+                    stats.totalHeadshots += player.headshots;
+                    stats.totalCombatScore += player.combatScore;
+                    
+                    if (!stats.agents[player.agent]) {
+                        stats.agents[player.agent] = { matches: 0, kills: 0, deaths: 0, wins: 0 };
+                    }
+                    stats.agents[player.agent].matches++;
+                    stats.agents[player.agent].kills += player.kills;
+                    stats.agents[player.agent].deaths += player.deaths;
+                    
+                    if ((player.teamId === 'Red' && match.score.red > match.score.blue) || 
+                        (player.teamId === 'Blue' && match.score.blue > match.score.red)) {
+                        stats.wins++;
+                        stats.agents[player.agent].wins++;
+                    }
+                });
+            });
+            
+            const playersList = Object.values(playerStatsMap);
+            
+            // Player selector and stats display
+            container.innerHTML = `
+                <div style="margin-bottom: 20px;">
+                    <label style="color: rgba(255, 255, 255, 0.7); margin-right: 10px;">Select Player:</label>
+                    <select id="playerSelect" onchange="displayPlayerDetails()" style="padding: 8px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; border-radius: 6px;">
+                        ${playersList.map(p => `<option value="${p.riotId}">${p.riotId}</option>`).join('')}
+                    </select>
+                </div>
+                
+                <div id="playerDetailsContainer"></div>
+            `;
+            
+            // Display first player by default
+            if (playersList.length > 0) {
+                selectedPlayer = playersList[0].riotId;
+                displayPlayerDetails();
+            }
+        }
+        
+        function displayPlayerDetails() {
+            const select = document.getElementById('playerSelect');
+            if (!select) return;
+            
+            selectedPlayer = select.value;
+            const container = document.getElementById('playerDetailsContainer');
+            
+            // Get player stats
+            const playerStatsMap = {};
+            matches.forEach(match => {
+                match.players.forEach(player => {
+                    const key = `${player.name}#${player.tag}`;
+                    if (key === selectedPlayer) {
+                        if (!playerStatsMap[key]) {
+                            playerStatsMap[key] = {
+                                name: player.name,
+                                tag: player.tag,
+                                matches: [],
+                                agents: {},
+                                totalKills: 0,
+                                totalDeaths: 0,
+                                totalAssists: 0,
+                                totalDamage: 0,
+                                totalCombatScore: 0,
+                                wins: 0
+                            };
+                        }
+                        
+                        const won = (player.teamId === 'Red' && match.score.red > match.score.blue) || 
+                                   (player.teamId === 'Blue' && match.score.blue > match.score.red);
+                        
+                        playerStatsMap[key].matches.push({
+                            date: match.timestamp,
+                            map: match.map,
+                            agent: player.agent,
+                            kills: player.kills,
+                            deaths: player.deaths,
+                            assists: player.assists,
+                            damage: player.damage,
+                            combatScore: player.combatScore,
+                            won: won
+                        });
+                        
+                        playerStatsMap[key].totalKills += player.kills;
+                        playerStatsMap[key].totalDeaths += player.deaths;
+                        playerStatsMap[key].totalAssists += player.assists;
+                        playerStatsMap[key].totalDamage += player.damage;
+                        playerStatsMap[key].totalCombatScore += player.combatScore;
+                        if (won) playerStatsMap[key].wins++;
+                        
+                        if (!playerStatsMap[key].agents[player.agent]) {
+                            playerStatsMap[key].agents[player.agent] = 0;
+                        }
+                        playerStatsMap[key].agents[player.agent]++;
+                    }
+                });
+            });
+            
+            const stats = playerStatsMap[selectedPlayer];
+            if (!stats) return;
+            
+            const matchCount = stats.matches.length;
+            const avgKills = (stats.totalKills / matchCount).toFixed(1);
+            const avgDeaths = (stats.totalDeaths / matchCount).toFixed(1);
+            const avgAssists = (stats.totalAssists / matchCount).toFixed(1);
+            const avgDamage = Math.floor(stats.totalDamage / matchCount);
+            const avgCombatScore = Math.floor(stats.totalCombatScore / matchCount);
+            const kd = (stats.totalKills / Math.max(stats.totalDeaths, 1)).toFixed(2);
+            const winRate = ((stats.wins / matchCount) * 100).toFixed(1);
+            
+            // Most played agent
+            const mostPlayedAgent = Object.entries(stats.agents).sort((a, b) => b[1] - a[1])[0];
+            
+            container.innerHTML = `
+                <div class="player-card">
+                    <div class="player-avatar">${stats.name.substring(0, 2).toUpperCase()}</div>
+                    <div class="player-info">
+                        <h3>${selectedPlayer}</h3>
+                        <div class="subtitle">${matchCount} matches played • ${winRate}% win rate</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="font-size: 24px; font-weight: bold; color: #ff8b5a;">${kd} K/D</div>
+                        <div style="color: rgba(255, 255, 255, 0.5); font-size: 14px;">Overall Ratio</div>
+                    </div>
+                </div>
+                
+                <div class="tournament-stats" style="margin-bottom: 30px;">
+                    <div class="stat-card">
+                        <div class="stat-value">${avgKills}</div>
+                        <div class="stat-label">AVG KILLS</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${avgDeaths}</div>
+                        <div class="stat-label">AVG DEATHS</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${avgAssists}</div>
+                        <div class="stat-label">AVG ASSISTS</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${avgDamage}</div>
+                        <div class="stat-label">AVG DAMAGE</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${avgCombatScore}</div>
+                        <div class="stat-label">AVG COMBAT</div>
+                    </div>
+                </div>
+                
+                <h3 style="margin-bottom: 15px; color: #ff8b5a;">Performance Metrics</h3>
+                <div class="performance-chart">
+                    <div class="chart-bar">
+                        <div class="chart-label">K/D Ratio</div>
+                        <div class="chart-progress">
+                            <div class="chart-fill" style="width: ${Math.min(kd * 33.33, 100)}%"></div>
+                        </div>
+                        <div class="chart-value">${kd}</div>
+                    </div>
+                    <div class="chart-bar">
+                        <div class="chart-label">Win Rate</div>
+                        <div class="chart-progress">
+                            <div class="chart-fill" style="width: ${winRate}%"></div>
+                        </div>
+                        <div class="chart-value">${winRate}%</div>
+                    </div>
+                    <div class="chart-bar">
+                        <div class="chart-label">Avg Combat</div>
+                        <div class="chart-progress">
+                            <div class="chart-fill" style="width: ${Math.min(avgCombatScore / 3, 100)}%"></div>
+                        </div>
+                        <div class="chart-value">${avgCombatScore}</div>
+                    </div>
+                </div>
+                
+                <h3 style="margin-bottom: 15px; color: #ff8b5a;">Agent Usage</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; margin-bottom: 30px;">
+                    ${Object.entries(stats.agents).map(([agent, count]) => `
+                        <div class="stat-card" style="text-align: center;">
+                            <div style="font-size: 18px; font-weight: bold; color: ${agent === mostPlayedAgent[0] ? '#ff8b5a' : 'white'};">
+                                ${agent}
+                            </div>
+                            <div style="font-size: 24px; margin: 5px 0;">${count}</div>
+                            <div class="stat-label">MATCHES</div>
+                        </div>
+                    `).join('')}
+                </div>
+                
+                <h3 style="margin-bottom: 15px; color: #ff8b5a;">Match History</h3>
+                <table class="stats-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Map</th>
+                            <th>Agent</th>
+                            <th>K/D/A</th>
+                            <th>Combat Score</th>
+                            <th>Damage</th>
+                            <th>Result</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${stats.matches.map(match => `
+                            <tr>
+                                <td>${new Date(match.date).toLocaleDateString()}</td>
+                                <td>${match.map}</td>
+                                <td>${match.agent}</td>
+                                <td>${match.kills}/${match.deaths}/${match.assists}</td>
+                                <td>${match.combatScore}</td>
+                                <td>${match.damage}</td>
+                                <td>
+                                    <span class="consent-badge ${match.won ? 'consent-granted' : 'consent-pending'}">
+                                        ${match.won ? 'WIN' : 'LOSS'}
+                                    </span>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+        
+        // Update Team Stats
+        function updateTeamStats() {
+            const container = document.getElementById('teamContent');
+            
+            const teams = {
+                'Team Alpha': {
+                    players: [],
+                    matches: 0,
+                    wins: 0,
+                    totalKills: 0,
+                    totalDeaths: 0,
+                    totalRounds: 0,
+                    roundsWon: 0
+                },
+                'Team Bravo': {
+                    players: [],
+                    matches: 0,
+                    wins: 0,
+                    totalKills: 0,
+                    totalDeaths: 0,
+                    totalRounds: 0,
+                    roundsWon: 0
+                }
+            };
+            
+            // Assign players to teams
+            tournamentParticipants.forEach(p => {
+                if (teams[p.team]) {
+                    teams[p.team].players.push(p);
+                }
+            });
+            
+            // Calculate team stats from matches
+            matches.forEach(match => {
+                const alphaPlayers = match.players.filter(p => 
+                    teams['Team Alpha'].players.some(tp => tp.riotId === `${p.name}#${p.tag}`)
+                );
+                const bravoPlayers = match.players.filter(p => 
+                    teams['Team Bravo'].players.some(tp => tp.riotId === `${p.name}#${p.tag}`)
+                );
+                
+                if (alphaPlayers.length > 0) {
+                    teams['Team Alpha'].matches++;
+                    alphaPlayers.forEach(p => {
+                        teams['Team Alpha'].totalKills += p.kills;
+                        teams['Team Alpha'].totalDeaths += p.deaths;
+                    });
+                    teams['Team Alpha'].totalRounds += 13;
+                    teams['Team Alpha'].roundsWon += Math.random() > 0.5 ? 13 : 6;
+                    if (Math.random() > 0.5) teams['Team Alpha'].wins++;
+                }
+                
+                if (bravoPlayers.length > 0) {
+                    teams['Team Bravo'].matches++;
+                    bravoPlayers.forEach(p => {
+                        teams['Team Bravo'].totalKills += p.kills;
+                        teams['Team Bravo'].totalDeaths += p.deaths;
+                    });
+                    teams['Team Bravo'].totalRounds += 13;
+                    teams['Team Bravo'].roundsWon += Math.random() > 0.5 ? 13 : 7;
+                    if (Math.random() > 0.5) teams['Team Bravo'].wins++;
+                }
+            });
+            
+            container.innerHTML = `
+                <div style="margin-bottom: 20px;">
+                    <label style="color: rgba(255, 255, 255, 0.7); margin-right: 10px;">Select Team:</label>
+                    <select id="teamSelect" onchange="displayTeamDetails()" style="padding: 8px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; border-radius: 6px;">
+                        <option value="Team Alpha">Team Alpha</option>
+                        <option value="Team Bravo">Team Bravo</option>
+                    </select>
+                </div>
+                
+                <div id="teamDetailsContainer"></div>
+            `;
+            
+            displayTeamDetails();
+        }
+        
+        function displayTeamDetails() {
+            const select = document.getElementById('teamSelect');
+            if (!select) return;
+            
+            selectedTeam = select.value;
+            const container = document.getElementById('teamDetailsContainer');
+            
+            const teams = {
+                'Team Alpha': {
+                    players: tournamentParticipants.filter(p => p.team === 'Team Alpha'),
+                    matches: 8,
+                    wins: 5,
+                    totalKills: 320,
+                    totalDeaths: 280,
+                    totalRounds: 104,
+                    roundsWon: 58
+                },
+                'Team Bravo': {
+                    players: tournamentParticipants.filter(p => p.team === 'Team Bravo'),
+                    matches: 8,
+                    wins: 3,
+                    totalKills: 295,
+                    totalDeaths: 310,
+                    totalRounds: 104,
+                    roundsWon: 46
+                }
+            };
+            
+            const team = teams[selectedTeam];
+            const winRate = ((team.wins / team.matches) * 100).toFixed(1);
+            const roundWinRate = ((team.roundsWon / team.totalRounds) * 100).toFixed(1);
+            const teamKD = (team.totalKills / team.totalDeaths).toFixed(2);
+            
+            container.innerHTML = `
+                <div class="team-card">
+                    <div class="team-header">
+                        <div class="team-name">${selectedTeam}</div>
+                        <div class="team-record">${team.wins}W - ${team.matches - team.wins}L</div>
+                    </div>
+                    
+                    <div class="tournament-stats" style="margin-bottom: 30px;">
+                        <div class="stat-card">
+                            <div class="stat-value">${team.matches}</div>
+                            <div class="stat-label">MATCHES</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${winRate}%</div>
+                            <div class="stat-label">WIN RATE</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${teamKD}</div>
+                            <div class="stat-label">TEAM K/D</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${roundWinRate}%</div>
+                            <div class="stat-label">ROUND WIN %</div>
+                        </div>
+                    </div>
+                    
+                    <h3 style="margin-bottom: 15px; color: #ff8b5a;">Team Performance</h3>
+                    <div class="performance-chart">
+                        <div class="chart-bar">
+                            <div class="chart-label">Win Rate</div>
+                            <div class="chart-progress">
+                                <div class="chart-fill" style="width: ${winRate}%"></div>
+                            </div>
+                            <div class="chart-value">${winRate}%</div>
+                        </div>
+                        <div class="chart-bar">
+                            <div class="chart-label">Round Win</div>
+                            <div class="chart-progress">
+                                <div class="chart-fill" style="width: ${roundWinRate}%"></div>
+                            </div>
+                            <div class="chart-value">${roundWinRate}%</div>
+                        </div>
+                        <div class="chart-bar">
+                            <div class="chart-label">Team K/D</div>
+                            <div class="chart-progress">
+                                <div class="chart-fill" style="width: ${Math.min(teamKD * 50, 100)}%"></div>
+                            </div>
+                            <div class="chart-value">${teamKD}</div>
+                        </div>
+                    </div>
+                    
+                    <h3 style="margin-bottom: 15px; color: #ff8b5a;">Roster</h3>
+                    <table class="stats-table">
+                        <thead>
+                            <tr>
+                                <th>Player</th>
+                                <th>Role</th>
+                                <th>Matches</th>
+                                <th>Avg K/D/A</th>
+                                <th>Avg Combat Score</th>
+                                <th>Consent</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${team.players.map(player => {
+                                const stats = {
+                                    matches: Math.floor(Math.random() * 3) + 5,
+                                    avgKills: Math.floor(Math.random() * 10) + 10,
+                                    avgDeaths: Math.floor(Math.random() * 8) + 8,
+                                    avgAssists: Math.floor(Math.random() * 6) + 2,
+                                    avgCombat: Math.floor(Math.random() * 50) + 200,
+                                    role: ['Duelist', 'Controller', 'Initiator', 'Sentinel'][Math.floor(Math.random() * 4)]
+                                };
+                                return `
+                                    <tr>
+                                        <td>${player.riotId}</td>
+                                        <td>${stats.role}</td>
+                                        <td>${stats.matches}</td>
+                                        <td>${stats.avgKills}/${stats.avgDeaths}/${stats.avgAssists}</td>
+                                        <td>${stats.avgCombat}</td>
+                                        <td>
+                                            ${player.consent ? 
+                                                '<span class="consent-badge consent-granted">✓</span>' : 
+                                                '<span class="consent-badge consent-pending">pending</span>'}
+                                        </td>
+                                    </tr>
+                                `;
+                            }).join('')}
+                        </tbody>
+                    </table>
+                    
+                    <h3 style="margin-top: 30px; margin-bottom: 15px; color: #ff8b5a;">Recent Matches</h3>
+                    <div style="display: grid; gap: 15px;">
+                        ${[1, 2, 3].map(i => `
+                            <div style="background: rgba(255, 255, 255, 0.03); padding: 15px; border-radius: 8px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div>
+                                        <strong>${['Haven', 'Ascent', 'Bind'][i-1]}</strong>
+                                        <div style="color: rgba(255, 255, 255, 0.5); font-size: 14px;">
+                                            ${new Date(Date.now() - i * 86400000).toLocaleDateString()}
+                                        </div>
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <div style="font-size: 20px; font-weight: bold;">
+                                            ${Math.random() > 0.5 ? 
+                                                '<span style="color: #50c878;">13 - 7</span>' : 
+                                                '<span style="color: #ff6b6b;">8 - 13</span>'}
+                                        </div>
+                                        <div style="font-size: 14px; color: rgba(255, 255, 255, 0.5);">
+                                            vs Team ${i === 1 ? 'Delta' : i === 2 ? 'Echo' : 'Foxtrot'}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Search Field Updates
+        function updateSearchFields() {
+            const method = document.getElementById('searchMethod').value;
+            document.getElementById('playerSearch').style.display = method === 'player' ? 'block' : 'none';
+            document.getElementById('matchIdSearch').style.display = method === 'matchId' ? 'block' : 'none';
+        }
+        
+        // Find Matches (Simulated)
+        function findMatches() {
+            const btn = document.querySelector('.btn');
+            const loader = document.getElementById('searchLoader');
+            const btnText = document.getElementById('searchBtnText');
+            
+            // Show loading state
+            loader.style.display = 'inline-block';
+            btnText.style.display = 'none';
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                const method = document.getElementById('searchMethod').value;
+                
+                if (method === 'player') {
+                    const riotId = document.getElementById('riotId').value;
+                    showStatus(`Searching matches for ${riotId}...`, 'success');
+                    
+                    // Generate new mock matches
+                    const newMatch = mockData.generateMatch();
+                    matches.unshift(newMatch);
+                    
+                    displayMatches();
+                    showStatus(`Found ${matches.length} matches for ${riotId}`, 'success');
+                } else if (method === 'matchId') {
+                    const matchId = document.getElementById('directMatchId').value || 'demo-abc123xyz';
+                    showStatus(`Fetching match ${matchId}...`, 'success');
+                    
+                    const newMatch = mockData.generateMatch(matchId);
+                    matches.unshift(newMatch);
+                    displayMatches();
+                    showStatus(`Match ${matchId} loaded successfully`, 'success');
+                }
+                
+                // Reset button state
+                loader.style.display = 'none';
+                btnText.style.display = 'inline';
+                btn.disabled = false;
+            }, 1500);
+        }
+        
+        // Display Matches
+        function displayMatches() {
+            const container = document.getElementById('matchResults');
+            
+            if (matches.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: rgba(255,255,255,0.5);">No matches found. Use the Match Finder to search for matches.</p>';
+                return;
+            }
+            
+            container.innerHTML = matches.slice(0, 5).map(match => `
+                <div class="match-display">
+                    <div class="match-header">
+                        <div>
+                            <strong style="font-size: 16px;">${match.map}</strong>
+                            ${match.isCustom ? '<span class="consent-badge consent-granted">CUSTOM</span>' : ''}
+                            <div class="match-info">
+                                <span>${match.mode}</span>
+                                <span>•</span>
+                                <span>${match.duration} min</span>
+                                <span>•</span>
+                                <span>${new Date(match.timestamp).toLocaleString()}</span>
+                            </div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-size: 20px; font-weight: bold;">
+                                <span class="team-red">${match.score.red}</span>
+                                <span style="margin: 0 10px;">-</span>
+                                <span class="team-blue">${match.score.blue}</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <table class="stats-table">
+                        <thead>
+                            <tr>
+                                <th>Player</th>
+                                <th>Agent</th>
+                                <th>K/D/A</th>
+                                <th>K/D</th>
+                                <th>Combat Score</th>
+                                <th>Damage</th>
+                                <th>HS%</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${match.players.map(player => `
+                                <tr>
+                                    <td>
+                                        <div class="player-name">
+                                            <span class="${player.teamId === 'Red' ? 'team-red' : 'team-blue'}">
+                                                ${player.name}#${player.tag}
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="agent-icon">${player.agent.substring(0, 2).toUpperCase()}</div>
+                                    </td>
+                                    <td class="kda ${player.kd >= 1 ? 'kda-positive' : 'kda-negative'}">
+                                        ${player.kills}/${player.deaths}/${player.assists}
+                                    </td>
+                                    <td>${player.kd}</td>
+                                    <td>${player.combatScore}</td>
+                                    <td>${player.damage}</td>
+                                    <td>${player.headshotPercentage}%</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `).join('');
+        }
+        
+        // Update Statistics
+        function updateStatistics() {
+            const container = document.getElementById('statisticsContent');
+            
+            // Calculate aggregate stats
+            const allPlayers = matches.flatMap(m => m.players);
+            const playerStats = {};
+            
+            allPlayers.forEach(p => {
+                const key = `${p.name}#${p.tag}`;
+                if (!playerStats[key]) {
+                    playerStats[key] = {
+                        matches: 0,
+                        totalKills: 0,
+                        totalDeaths: 0,
+                        totalAssists: 0,
+                        totalDamage: 0,
+                        totalCombatScore: 0
+                    };
+                }
+                
+                playerStats[key].matches++;
+                playerStats[key].totalKills += p.kills;
+                playerStats[key].totalDeaths += p.deaths;
+                playerStats[key].totalAssists += p.assists;
+                playerStats[key].totalDamage += p.damage;
+                playerStats[key].totalCombatScore += p.combatScore;
+            });
+            
+            const leaderboard = Object.entries(playerStats).map(([name, stats]) => ({
+                name,
+                ...stats,
+                avgKills: (stats.totalKills / stats.matches).toFixed(1),
+                avgDeaths: (stats.totalDeaths / stats.matches).toFixed(1),
+                avgAssists: (stats.totalAssists / stats.matches).toFixed(1),
+                avgDamage: Math.floor(stats.totalDamage / stats.matches),
+                avgCombatScore: Math.floor(stats.totalCombatScore / stats.matches),
+                kd: (stats.totalKills / Math.max(stats.totalDeaths, 1)).toFixed(2)
+            })).sort((a, b) => b.avgCombatScore - a.avgCombatScore);
+            
+            container.innerHTML = `
+                <div class="tournament-stats" style="margin-bottom: 30px;">
+                    <div class="stat-card">
+                        <div class="stat-value">${matches.length}</div>
+                        <div class="stat-label">TOTAL MATCHES</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${Object.keys(playerStats).length}</div>
+                        <div class="stat-label">UNIQUE PLAYERS</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${matches.filter(m => m.isCustom).length}</div>
+                        <div class="stat-label">CUSTOM GAMES</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${Math.floor(matches.reduce((sum, m) => sum + m.duration, 0) / matches.length)}</div>
+                        <div class="stat-label">AVG DURATION (MIN)</div>
+                    </div>
+                </div>
+                
+                <h3 style="margin-bottom: 15px; color: #ff8b5a;">FirstLightValorant Season 22 - Player Leaderboard</h3>
+                <table class="stats-table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Player</th>
+                            <th>Matches</th>
+                            <th>Avg K/D/A</th>
+                            <th>K/D Ratio</th>
+                            <th>Avg Combat Score</th>
+                            <th>Avg Damage</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${leaderboard.slice(0, 10).map((player, index) => `
+                            <tr>
+                                <td style="font-weight: bold; color: ${index < 3 ? '#ff8b5a' : 'inherit'};">
+                                    #${index + 1}
+                                </td>
+                                <td>${player.name}</td>
+                                <td>${player.matches}</td>
+                                <td>${player.avgKills}/${player.avgDeaths}/${player.avgAssists}</td>
+                                <td class="${player.kd >= 1 ? 'kda-positive' : 'kda-negative'}">${player.kd}</td>
+                                <td>${player.avgCombatScore}</td>
+                                <td>${player.avgDamage}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+        
+        // Update Consent Management
+        function updateConsentManagement() {
+            const container = document.getElementById('consentContent');
+            
+            container.innerHTML = `
+                <div class="status-warning" style="margin-bottom: 20px;">
+                    <strong>Important:</strong> All players must provide explicit consent for data collection before their statistics can be processed. This is required for Riot API compliance.
+                </div>
+                
+                <h3 style="margin-bottom: 15px; color: #ff8b5a;">FirstLightValorant Season 22 Participants</h3>
+                <table class="stats-table">
+                    <thead>
+                        <tr>
+                            <th>Player</th>
+                            <th>Team</th>
+                            <th>Consent Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${tournamentParticipants.map(player => `
+                            <tr>
+                                <td>${player.riotId}</td>
+                                <td>${player.team}</td>
+                                <td>
+                                    ${player.consent ? 
+                                        '<span class="consent-badge consent-granted">Granted</span>' : 
+                                        '<span class="consent-badge consent-pending">Pending</span>'}
+                                </td>
+                                <td>
+                                    ${!player.consent ? 
+                                        `<button onclick="grantConsent('${player.puuid}')" class="btn" style="padding: 5px 10px; font-size: 12px;">Request Consent</button>` :
+                                        `<button onclick="revokeConsent('${player.puuid}')" class="btn btn-secondary" style="padding: 5px 10px; font-size: 12px;">Revoke</button>`}
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+                
+                <div style="margin-top: 20px;">
+                    <button class="btn" onclick="requestBulkConsent()">Request Consent from All Pending</button>
+                </div>
+            `;
+        }
+        
+        // Consent Actions
+        function grantConsent(puuid) {
+            const player = tournamentParticipants.find(p => p.puuid === puuid);
+            if (player) {
+                player.consent = true;
+                updateConsentManagement();
+                showStatus(`Consent granted for ${player.riotId}`, 'success');
+            }
+        }
+        
+        function revokeConsent(puuid) {
+            const player = tournamentParticipants.find(p => p.puuid === puuid);
+            if (player) {
+                player.consent = false;
+                updateConsentManagement();
+                showStatus(`Consent revoked for ${player.riotId}`, 'warning');
+            }
+        }
+        
+        function requestBulkConsent() {
+            const pending = tournamentParticipants.filter(p => !p.consent);
+            pending.forEach(p => p.consent = true);
+            updateConsentManagement();
+            showStatus(`Consent requested from ${pending.length} players`, 'success');
+        }
+        
+        // Show Participants
+        function showParticipants() {
+            switchTab('consent');
+            document.querySelectorAll('.tab')[2].click();
+        }
+        
+        // Export Data
+        function exportData() {
+            showStatus('Exporting tournament data to CSV...', 'success');
+            setTimeout(() => {
+                showStatus('Tournament data exported successfully! File: firstlight_season22.csv', 'success');
+                
+                // In real implementation, this would trigger a download
+                const csvData = matches.flatMap(m => 
+                    m.players.map(p => ({
+                        match_id: m.matchId,
+                        timestamp: m.timestamp,
+                        map: m.map,
+                        player: `${p.name}#${p.tag}`,
+                        agent: p.agent,
+                        kills: p.kills,
+                        deaths: p.deaths,
+                        assists: p.assists,
+                        damage: p.damage
+                    }))
+                );
+                
+                console.log('Export data:', csvData);
+            }, 1000);
+        }
+        
+        // Show Status Messages
+        function showStatus(message, type = 'info') {
+            const statusArea = document.getElementById('statusArea');
+            const statusClass = type === 'success' ? 'status-success' : 
+                              type === 'error' ? 'status-error' : 
+                              'status-warning';
+            
+            const statusDiv = document.createElement('div');
+            statusDiv.className = `status-message ${statusClass}`;
+            statusDiv.innerHTML = `
+                <span>${message}</span>
+            `;
+            
+            statusArea.innerHTML = '';
+            statusArea.appendChild(statusDiv);
+            
+            setTimeout(() => {
+                statusDiv.style.opacity = '0';
+                setTimeout(() => statusDiv.remove(), 300);
+            }, 5000);
+        }
+        
+        // Show API Key Info
+        function showAPIKeyInfo() {
+            document.getElementById('apiModal').classList.add('active');
+        }
+        
+        function closeAPIModal() {
+            document.getElementById('apiModal').classList.remove('active');
+        }
+        
+        // Initialize on load
+        window.onload = function() {
+            initializeDemo();
+            showStatus('Demo mode active - using mock data for demonstration', 'warning');
+        };
+    </script>
+</body>
+</html>
