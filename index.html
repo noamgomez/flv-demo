@@ -1,5 +1,3 @@
-#<!-- deploy test -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1326,7 +1324,6 @@
             const team = teams[selectedTeam];
             const winRate = ((team.wins / team.matches) * 100).toFixed(1);
             const roundWinRate = ((team.roundsWon / team.totalRounds) * 100).toFixed(1);
-            const avgKillsPerMatch = (team.totalKills / team.matches).toFixed(1);
             
             container.innerHTML = `
                 <div class="team-card">
@@ -1345,12 +1342,12 @@
                             <div class="stat-label">WIN RATE</div>
                         </div>
                         <div class="stat-card">
-                            <div class="stat-value">${avgKillsPerMatch}</div>
-                            <div class="stat-label">AVG KILLS</div>
-                        </div>
-                        <div class="stat-card">
                             <div class="stat-value">${roundWinRate}%</div>
                             <div class="stat-label">ROUND WIN %</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${team.roundsWon}/${team.totalRounds}</div>
+                            <div class="stat-label">ROUNDS W/L</div>
                         </div>
                     </div>
                     
@@ -1370,13 +1367,6 @@
                             </div>
                             <div class="chart-value">${roundWinRate}%</div>
                         </div>
-                        <div class="chart-bar">
-                            <div class="chart-label">Avg Kills</div>
-                            <div class="chart-progress">
-                                <div class="chart-fill" style="width: ${Math.min((avgKillsPerMatch / 50) * 100, 100)}%"></div>
-                            </div>
-                            <div class="chart-value">${avgKillsPerMatch}</div>
-                        </div>
                     </div>
                     
                     <h3 style="margin-bottom: 15px; color: #ff8b5a;">Roster</h3>
@@ -1388,7 +1378,6 @@
                                 <th>Matches</th>
                                 <th>Avg K/D/A</th>
                                 <th>Avg Combat Score</th>
-                                <th>Consent</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -1408,11 +1397,6 @@
                                         <td>${stats.matches}</td>
                                         <td>${stats.avgKills}/${stats.avgDeaths}/${stats.avgAssists}</td>
                                         <td>${stats.avgCombat}</td>
-                                        <td>
-                                            ${player.consent ? 
-                                                '<span class="consent-badge consent-granted">✓</span>' : 
-                                                '<span class="consent-badge consent-pending">pending</span>'}
-                                        </td>
                                     </tr>
                                 `;
                             }).join('')}
